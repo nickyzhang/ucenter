@@ -1,0 +1,104 @@
+server:
+  port: 9000
+
+redis:
+  pubsub:
+    auth_topic: 
+      name: auth_topic
+      # 是否启用监听
+      enabled: false
+    audit_topic:
+      name: audit_topic
+      # 是否启用监听
+      enabled: false
+      # 是否启用审计消息发送
+      send-enabled: true
+
+logging:
+  level:
+    com.carlt.ucenter.mapper: debug
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  session:
+    store-type: none
+  application:
+    name: Bigdata-Gateway
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    name: test
+    url: jdbc:mysql://localhost:3306/ucenter?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    username: tokings
+    password: 19890625
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+mybatis:
+  #注意：一定要对应mapper映射xml文件的所在路径
+  mapper-locations: classpath:mapping/*.xml
+  # 注意：对应实体类的路径
+  type-aliases-package: com.carlt.ucenter.model
+
+#pagehelper分页插件
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
+
+zuul:
+  add-host-header: true
+  host:
+    #连接超时
+    connect-timeout-millis: 120000
+    #读写超时
+    socket-timeout-millis: 120000
+  # 解决重复跨域问题
+  sensitive-headers: Access-Control-Allow-Origin
+  # 忽略头消息
+  ignored-headers: Access-Control-Allow-Origin
+  # 路由配置
+  routes:
+    api-local:
+      path: /local/**
+      url: http://localhost:9000
+    api-backbond:
+      path: /backbond/**
+      url: http://162.16.109.119:8080/ucenter
+  # 限流配置
+  ratelimit:
+    key-prefix: pig-ratelimite 
+    enabled: true 
+    repository: IN_MEMORY 
+    behind-proxy: true
+    policies:
+      api-local:
+        limit: 300 #optional - request number limit per refresh interval window
+        #quota: 1200 #optional - request time limit per refresh interval window (in seconds)
+        refresh-interval: 60 #default value (in seconds)
+        type:
+          - url
+      api-backbond:
+        limit: 300
+        #quota: 1800
+        refresh-interval: 60
+        type:
+          - url

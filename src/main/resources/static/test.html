@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>登录 | UCenter</title>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+</head>
+
+<body>
+	<script src="jquery.js"></script>
+	<script>
+		// 没有带@RequestBody的请求，注意contentType的区别，默认是"application/x-www-form-urlencoded; charset=UTF-8"
+// 		$.ajax({
+// 			type : "post",
+// 			url : 'http://162.16.109.102:9000/local/api/login',
+// 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+// 			headers : {
+// 				'Access-Token' : 'token#1#819495833600'
+// 			},
+// 			dataType : "json",
+// 			data : {
+// 				"userCode" : "1000",
+// 				"password" : "88888888"
+// 			},
+// 			success : function(data) {
+// 				console.log(data);
+// 			}
+// 		});
+		$.ajax({
+			type : "delete",
+			url : 'http://10.0.63.207:9000/local/api/role/delete',
+			headers : {
+				'Access-Token' : 'token#1#819495833600'
+			},
+			dataType : "json",
+			data : {
+				"ids" : 6
+			},
+			success : function(data) {
+				console.log(data);
+			}
+		});
+
+		// 带@RequestBody的请求，注意contentType的区别，必须是"application/json; charset=UTF-8"
+// 		$.ajax({
+// 			type : "post",
+// 			url : 'http://162.16.109.102:9000/local/api/dept/update2',
+// 			contentType : "application/json; charset=UTF-8",
+// 			dataType : "json",
+// 			data : JSON.stringify({
+// 				"id" : 4,
+// 				"deptCode" : "0104",
+// 				"parDeptCode" : "01",
+// 				"deptName" : "AJAX测试部门",
+// 				"mark" : "testMark"
+// 			}),
+// 			success : function(data) {
+// 				console.log(data);
+// 			}
+// 		});
+// 		$.ajax({
+// 			type : "post",
+// 			url : 'http://162.16.109.102:9000/local/api/user/linkRoleTest',
+// 			contentType : "application/json; charset=UTF-8",
+// 			dataType : "json",
+// 			data : JSON.stringify([ {
+// 				"id" : 1,
+// 				"roleName" : "hello1"
+// 			}, {
+// 				"id" : 2,
+// 				"roleName" : "hello2"
+// 			} ]),
+// 			success : function(data) {
+// 				console.log(data);
+// 			}
+// 		});
+	</script>
+	<form action=""></form>
+</body>
+</html>

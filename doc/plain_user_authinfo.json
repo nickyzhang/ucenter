@@ -1,0 +1,27 @@
+{
+    "code": "0",
+    "data": {
+        "menu": [],
+        "user": {
+            "id": 2,
+            "userCode": "1002",
+            "password": "******",
+            "userName": "李妮科",
+            "mark": "开发中心经理",
+            "email": "1001@hncy58.com",
+            "mobilePhone": "18888888888",
+            "deptCode": "0101",
+            "position": "部门经理",
+            "loginStatus": 0,
+            "actStatus": 0,
+            "createTime": "2018-08-13 00:11:22.000",
+            "updateTime": "2018-08-13 00:11:22.000"
+        },
+        "token": "token#2#1724475641856",
+        "authInfo": {
+            "userId": 2,
+            "userCode": 1002,
+            "roles": []
+        }
+    }
+}

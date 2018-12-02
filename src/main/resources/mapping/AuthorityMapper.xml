@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.carlt.ucenter.mapper.AuthorityMapper">
+
+	<resultMap id="BaseResultMap" type="com.carlt.ucenter.model.AuthInfo">
+		<id column="userId" property="userId" jdbcType="INTEGER" />
+		<result column="userCode" property="userCode" jdbcType="VARCHAR" />
+		<collection property="roles" ofType="com.carlt.ucenter.model.RoleInfo">
+			<id property="roleId" column="roleId" />
+			<id property="roleType" column="roleType" />
+			<collection property="resources" ofType="com.carlt.ucenter.model.Resource">
+				<id property="id" column="resId" />
+				<id property="pid" column="resPid" />
+				<result property="resType" column="resType" />
+				<result property="resName" column="resName" />
+				<result property="resUri" column="resUri" />
+				<result property="rank" column="rank" />
+				<result property="mark" column="mark" />
+				<result property="createTime" column="createTime" jdbcType="TIMESTAMP" />
+				<result property="updateTime" column="updateTime" jdbcType="TIMESTAMP" />
+			</collection>
+		</collection>
+	</resultMap>
+
+	<select id="selectByUserId" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select u.id userId, u.user_code userCode
+		,ur.role_id roleId
+		,sr.role_type roleType
+		,rr.res_id resId
+		,r.res_type resType ,r.res_name resName,r.res_uri resUri,r.pid resPid, r.rank
+		,r.mark ,r.create_time createTime ,r.update_time updateTime
+		from
+		sys_user u
+		left join sys_user_role ur on u.id = ur.user_id
+		left join sys_role sr on ur.role_id = sr.id
+		left join sys_role_res rr on ur.role_id = rr.role_id
+		left join sys_res r on rr.res_id = r.id
+		where u.id =
+		#{userId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectByUserCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select u.id userId, u.user_code userCode
+		,ur.role_id roleId
+		,sr.role_type roleType
+		,rr.res_id resId
+		,r.res_type resType ,r.res_name resName,r.res_uri resUri,r.pid resPid, r.rank
+		,r.mark ,r.create_time createTime ,r.update_time updateTime
+		from
+		sys_user u
+		left join sys_user_role ur on u.id = ur.user_id
+		left join sys_role sr on ur.role_id = sr.id
+		left join sys_role_res rr on ur.role_id = rr.role_id
+		left join sys_res r on rr.res_id = r.id
+		where u.user_code =
+		#{userCode,jdbcType=VARCHAR}
+	</select>
+</mapper>

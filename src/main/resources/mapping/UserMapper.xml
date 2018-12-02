@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.carlt.ucenter.mapper.UserMapper">
+
+	<resultMap id="BaseResultMap" type="com.carlt.ucenter.model.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_code" property="userCode" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="mark" property="mark" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="dept_code" property="deptCode" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="login_status" property="loginStatus" jdbcType="INTEGER" />
+		<result column="act_status" property="actStatus" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,user_code,password,user_name,mark,email,mobile_phone,dept_code,position,login_status,act_status,create_time,update_time
+	</sql>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<select id="selectByUserCode" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		where user_code = #{userCode, jdbcType=VARCHAR}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+	</select>
+	<select id="select" resultMap="BaseResultMap" parameterType="com.carlt.ucenter.model.User">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user
+		<where>
+			<if test="userName != null  and userName != ''">
+				user_name like '%${userName}%'
+			</if>
+			<if test="userCode != null  and userCode != ''">
+				and user_code = #{userCode}
+			</if>
+			<if test="mark != null  and mark != ''">
+				and mark like '%${mark}%'
+			</if>
+			<if test="mobilePhone != null  and mobilePhone != ''">
+				and mobile_phone like '%${mobilePhone}%'
+			</if>
+			<if test="deptCode != null  and deptCode != ''">
+				and dept_code = #{deptCode}
+			</if>
+			<if test="position != null  and position != ''">
+				and position like '%${position}%'
+			</if>
+			<if test="loginStatus != null and loginStatus >= 0">
+				and login_status = #{loginStatus}
+			</if>
+			<if test="actStatus != null and actStatus >= 0">
+				and act_status = #{actStatus}
+			</if>
+			<if test="createTime != null  and createTime != ''">
+				and create_time &gt;= #{createTime}
+			</if>
+			<if test="updateTime != null  and updateTime != ''">
+				and update_time &gt;= #{updateTime}
+			</if>
+		</where>
+		<if
+			test="sortField != null and sortField != '' and sortType != null and sortType != ''">
+			order by ${sortField} ${sortType}
+		</if>
+	</select>
+
+	<delete id="delete">
+		delete from sys_user where id in
+		<foreach collection="ids" item="id" index="index" open="("
+			close=")" separator=",">
+			#{id, jdbcType=INTEGER}
+		</foreach>
+	</delete>
+
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id"
+		keyColumn="id" parameterType="com.carlt.ucenter.model.User">
+		insert into sys_user
+		(id,user_code,password,user_name,mark,email,mobile_phone,dept_code,position,login_status,act_status,create_time,update_time)
+		values (
+		#{id,jdbcType=INTEGER}
+		,#{userCode,jdbcType=VARCHAR}
+		,#{password,jdbcType=VARCHAR}
+		,#{userName,jdbcType=VARCHAR}
+		,#{mark,jdbcType=VARCHAR}
+		,#{email,jdbcType=VARCHAR}
+		,#{mobilePhone,jdbcType=VARCHAR}
+		,#{deptCode,jdbcType=VARCHAR}
+		,#{position,jdbcType=VARCHAR}
+		,#{loginStatus,jdbcType=INTEGER}
+		,#{actStatus,jdbcType=INTEGER}
+		,#{createTime,jdbcType=TIMESTAMP}
+		,#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.hncy58.bigdata.gateway.model.User">
+		update sys_user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="deptCode != null">
+				dept_code = #{deptCode,jdbcType=VARCHAR},
+			</if>
+			<if test="position != null">
+				position = #{position,jdbcType=VARCHAR},
+			</if>
+			<if test="loginStatus != null">
+				login_status = #{loginStatus,jdbcType=INTEGER},
+			</if>
+			<if test="actStatus != null">
+				act_status = #{actStatus,jdbcType=INTEGER},
+			</if>
+			update_time = now()
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByToken" parameterType="com.carlt.ucenter.model.User">
+		update sys_user
+		<set>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="position != null">
+				position = #{position,jdbcType=VARCHAR},
+			</if>
+			update_time = now()
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updatePWDByToken">
+		update sys_user set password = #{newPassword
+		,jdbcType=VARCHAR} where id = #{id,jdbcType=INTEGER} and password =
+		#{oldPassword ,jdbcType=VARCHAR}
+	</update>
+	<update id="logout">
+		update sys_user set login_status = 0, update_time =
+		now()
+		where id = #{userId,jdbcType=INTEGER}
+	</update>
+
+	<insert id="linkRoles">
+		insert into sys_user_role(user_id, role_id) values
+		<foreach collection="roleIds" item="roleId" index="index"
+			open="" close="" separator=",">
+			(#{userId, jdbcType=INTEGER},#{roleId,
+			jdbcType=INTEGER})
+		</foreach>
+	</insert>
+
+	<delete id="unlinkRoles">
+		delete from sys_user_role where user_id = #{userId} and role_id in
+		<foreach collection="roleIds" item="roleId" index="index"
+			open="(" close=")" separator=",">
+			#{roleId, jdbcType=INTEGER}
+		</foreach>
+	</delete>
+	<delete id="unlinkUserRoles">
+		delete from sys_user_role where user_id in
+		<foreach collection="userIds" item="userId" index="index"
+			open="(" close=")" separator=",">
+			#{userId, jdbcType=INTEGER}
+		</foreach>
+	</delete>
+
+	<select id="selectUserByRole" resultMap="BaseResultMap">
+		select u.* from sys_user u left join sys_user_role ur on u.id =
+		ur.user_id where ur.role_id in
+		<foreach collection="roleIds" item="roleId" index="index"
+			open="(" close=")" separator=",">
+			#{roleId, jdbcType=INTEGER}
+		</foreach>
+	</select>
+
+	<select id="selectUserByRes" resultMap="BaseResultMap">
+		SELECT DISTINCT u.* FROM sys_user u
+		LEFT JOIN sys_user_role ur ON u.id
+		= ur.user_id
+		LEFT JOIN sys_role_res rr on ur.role_id = rr.role_id
+		WHERE
+		rr.res_id IN
+		<foreach collection="resIds" item="resId" index="index" open="("
+			close=")" separator=",">
+			#{resId, jdbcType=INTEGER}
+		</foreach>
+	</select>
+
+
+</mapper>
